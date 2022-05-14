@@ -5,10 +5,15 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
+const db = admin.firestore()
+
 const app = express();
 
+app.use(cors({origin: true}));
+
+
 app.get("/", async (req, res) => {
-  const snapshot = await admin.firestore().collection("users").get();
+  const snapshot = await db.collection("users").get();
 
   let users = [];
   snapshot.forEach((doc) => {
@@ -22,7 +27,7 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/:id", async (req, res) => {
-    const snapshot = await admin.firestore().collection('users').doc(req.params.id).get();
+    const snapshot = await db.collection('users').doc(req.params.id).get();
 
     const userId = snapshot.id;
     const userData = snapshot.data();
@@ -33,7 +38,7 @@ app.get("/:id", async (req, res) => {
 app.post("/", async (req, res) => {
   const user = req.body;
 
-  await admin.firestore().collection("users").add(user);
+  await db.collection("users").add(user);
 
   res.status(201).send();
 });
@@ -41,7 +46,7 @@ app.post("/", async (req, res) => {
 app.put("/:id", async (req, res) => {
     const body = req.body;
 
-    await admin.firestore().collection('users').doc(req.params.id).update(body);
+    await db.collection('users').doc(req.params.id).update(body);
 
     res.status(200).send()
 });
@@ -50,7 +55,7 @@ app.put("/:id", async (req, res) => {
 app.put("/users/:id/data/", async (req, res) => {
   const user = req.body;
 
-  await admin.firestore().collection('users').doc('databases').collection(req.params.id).add(body);
+  await db.collection('users').doc('databases').collection(req.params.id).add(body);
 
   res.status(201).send();
 });
@@ -59,16 +64,9 @@ app.put("/users/:id/data/", async (req, res) => {
 
 
 app.delete("/:id", async (req, res) => {
-    await admin.firestore().collection("users").doc(req.params.id).delete();
+    await db.collection("users").doc(req.params.id).delete();
 
     res.status(200).send();
 })
 
 exports.user = functions.https.onRequest(app);
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   response.send("Hello from Firebase!");
-// });
