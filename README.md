@@ -4,3 +4,11 @@ Built with JavaScript and Firebase Cloud Storage
 ![image](https://user-images.githubusercontent.com/65264501/168420540-aafae308-5e40-458f-885a-f559a4f3ca6e.png)
 ![image](https://user-images.githubusercontent.com/65264501/168420600-440941e2-b9e2-49d4-8bfa-fb32693a556e.png)
 
+Only the API for CRUD operations.
+
+Things to-do 
+Front End Website
+Chrome Extension
+Connect to API
+
+
